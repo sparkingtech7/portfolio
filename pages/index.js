@@ -1,270 +1,202 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
 
-export default function ProPortfolioExpanded() {
+export default function InteractivePortfolio() {
   const [mounted, setMounted] = useState(false)
+  const [activeFilter, setActiveFilter] = useState('All')
+  const [showModal, setShowModal] = useState(false)
+  const [typedText, setTypedText] = useState('')
+  const fullText = "Full Stack Developer."
 
+  // Projects Data
+  const projects = [
+    { id: 1, title: 'Inventory SaaS', category: 'Backend', desc: 'Real-time stock tracking with WebSockets.', tags: ['Next.js', 'Supabase'], img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80' },
+    { id: 2, title: 'Crypto Tracker', category: 'Mobile', desc: 'Live price tracking app for iOS/Android.', tags: ['React Native', 'API'], img: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=800&q=80' },
+    { id: 3, title: 'E-Commerce AI', category: 'Frontend', desc: 'AI-powered product recommendations.', tags: ['OpenAI', 'React'], img: 'https://images.unsplash.com/photo-1661956602116-aa6865609028?auto=format&fit=crop&w=800&q=80' },
+    { id: 4, title: 'Bank API Core', category: 'Backend', desc: 'Secure transaction processing system.', tags: ['Node.js', 'Docker'], img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80' },
+  ]
+
+  // Filter Logic
+  const filteredProjects = activeFilter === 'All' 
+    ? projects 
+    : projects.filter(p => p.category === activeFilter)
+
+  // Typing Effect
   useEffect(() => {
     setMounted(true)
+    let index = 0
+    const timer = setInterval(() => {
+      setTypedText(fullText.slice(0, index + 1))
+      index++
+      if (index === fullText.length) clearInterval(timer)
+    }, 100)
+    return () => clearInterval(timer)
   }, [])
 
   return (
     <div className="container">
       <Head>
-        <title>Portfolio | Full Stack Developer</title>
+        <title>Portfolio | Interactive</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      {/* BACKGROUND GLOW ORBS */}
       <div className="glow-orb purple" />
       <div className="glow-orb blue" />
+
+      {/* MODAL OVERLAY */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Let's Work Together!</h3>
+            <p>I am currently available for new projects.</p>
+            <a href="mailto:email@example.com" className="modal-btn">Send Email</a>
+            <button className="close-btn" onClick={() => setShowModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
 
       <main className={`content ${mounted ? 'visible' : ''}`}>
         
         {/* NAV */}
         <nav className="nav">
           <span className="logo">DEV.PORTFOLIO</span>
-          <div className="nav-links">
-            <a href="#projects">Work</a>
-            <a href="#experience">Experience</a>
-            <a href="mailto:email@example.com" className="contact-link">Contact</a>
-          </div>
+          <button className="contact-btn" onClick={() => setShowModal(true)}>Hire Me</button>
         </nav>
 
-        {/* HERO SECTION WITH IMAGE */}
-        <section className="hero-split">
-          <div className="hero-text">
+        {/* HERO WITH TYPING EFFECT */}
+        <section className="hero">
+          <div className="hero-content">
+            <span className="badge">Available for work</span>
             <h1>
-              Crafting digital <br />
-              <span className="gradient-text">experiences.</span>
+              I am a <br />
+              <span className="gradient-text">{typedText}</span>
+              <span className="cursor">|</span>
             </h1>
             <p className="subtitle">
-              I'm a Full Stack Developer with 2 years of experience building accessible, high-performance web applications using the **React** and **Node.js** ecosystem.
+              Interactive experiences built with code. 
+              Focusing on <b>React</b>, <b>Next.js</b>, and <b>Animation</b>.
             </p>
-            <div className="hero-btns">
-               <a href="#projects" className="btn primary">View My Work</a>
-               <a href="#" className="btn secondary">Download CV</a>
-            </div>
-          </div>
-          {/* PROFILE IMAGE - Replace URL with client's photo later */}
-          <div className="profile-img-container glass">
-            <img 
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
-              alt="Profile" 
-              className="profile-img"
-            />
           </div>
         </section>
 
-        {/* BENTO GRID LAYOUT */}
-        <div className="grid" id="projects">
-          
-          {/* CARD: THE STACK */}
-          <div className="card glass">
-            <h3>My Toolbox</h3>
-            <p>The technologies I use to bring ideas to life.</p>
-            <div className="tags">
-              {['Next.js 14', 'React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PostgreSQL', 'Prisma', 'Docker', 'AWS', 'Figma'].map(t => (
-                <span key={t} className="tag">{t}</span>
-              ))}
-            </div>
+        {/* INTERACTIVE FILTER TABS */}
+        <section className="portfolio-section">
+          <div className="tabs">
+            {['All', 'Frontend', 'Backend', 'Mobile'].map(cat => (
+              <button 
+                key={cat} 
+                className={`tab ${activeFilter === cat ? 'active' : ''}`}
+                onClick={() => setActiveFilter(cat)}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
 
-           {/* CARD: ABOUT */}
-          <div className="card glass large">
-            <h3>More Than Just Code</h3>
-            <p>
-              While I specialize in full-stack development, I have a keen eye for **UI/UX design** and system architecture. 
-              Over the last 2 years, I've moved from building simple websites to architecting complex SaaS platforms that handle thousands of users.
-              My goal is always to build scalable solutions that are intuitive for the end-user.
-            </p>
-          </div>
-
-          {/* PROJECT 1 - WITH IMAGE */}
-          <div className="card large glass project-card">
-            <img 
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-              alt="Dashboard Project"
-              className="project-thumb"
-            />
-            <div className="project-content">
-              <div className="project-header">
-                <h3>Inventory SaaS Dashboard</h3>
-                <span className="arrow">↗</span>
+          <div className="grid">
+            {filteredProjects.map(project => (
+              <div key={project.id} className="card glass project-card">
+                <div className="img-wrapper">
+                  <img src={project.img} alt={project.title} className="project-img" />
+                  <div className="overlay">
+                    <button className="view-btn">View Code</button>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <span className="category-tag">{project.category}</span>
+                  <h3>{project.title}</h3>
+                  <p>{project.desc}</p>
+                  <div className="tags">
+                    {project.tags.map(t => <span key={t} className="tag">{t}</span>)}
+                  </div>
+                </div>
               </div>
-              <p>A real-time inventory management system for small businesses. Features include stock tracking, automated alerts, and data visualization charts.</p>
-              <div className="tags">
-                <span className="tag highlight">Next.js App Router</span>
-                <span className="tag">Supabase Auth</span>
-                <span className="tag">Recharts</span>
-              </div>
-            </div>
+            ))}
           </div>
-
-          {/* PROJECT 2 - WITH IMAGE */}
-          <div className="card glass project-card">
-             <img 
-              src="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-              alt="Crypto Project"
-              className="project-thumb"
-            />
-            <div className="project-content">
-              <h3>High-Frequency Crypto API</h3>
-              <p>Robust Node.js backend tracking live crypto prices with low latency across multiple exchanges.</p>
-              <div className="tags">
-                <span className="tag">Node.js</span>
-                <span className="tag">Redis Caching</span>
-              </div>
-             </div>
-          </div>
-
-          {/* EXPERIENCE CARD */}
-          <div className="card glass large" id="experience">
-            <h3>Journey & Experience</h3>
-            <div className="timeline">
-              <div className="timeline-item">
-                <span className="date">2024 - Present</span>
-                <h4>Freelance Full Stack Developer</h4>
-                <p>Building custom web solutions for diverse clients, focusing on e-commerce and internal tooling.</p>
-              </div>
-               <div className="timeline-item">
-                <span className="date">2022 - 2024</span>
-                <h4>Junior Developer @ TechStartup Inc.</h4>
-                <p>Maintained a React Native codebase and migrated legacy backend services to Node.js microservices.</p>
-              </div>
-            </div>
-          </div>
-          
-           {/* TESTIMONIAL */}
-          <div className="card glass highlight-card">
-            <p className="quote">"Delivered the project two weeks ahead of schedule. The code quality was exceptional and the final design exceeded our expectations."</p>
-            <div className="client-info">
-              <span className="client-name">— Sarah Jenkins, CEO of StartUpX</span>
-            </div>
-          </div>
-
-        </div>
-
-        {/* FOOTER */}
-        <footer className="footer">
-          <h2>Let's build something amazing together.</h2>
-          <a href="mailto:email@example.com" className="btn primary big">Get in Touch</a>
-          <p className="copyright">© 2026 Developer Portfolio. Built with Next.js</p>
-        </footer>
+        </section>
 
       </main>
 
-      {/* CSS STYLES */}
+      {/* STYLES */}
       <style jsx global>{`
         :root {
           --bg: #050505;
           --glass: rgba(255, 255, 255, 0.05);
           --border: rgba(255, 255, 255, 0.1);
-          --accent: #fff;
+          --primary: #3b82f6;
         }
-
-        body {
-          margin: 0;
-          background: var(--bg);
-          color: #eee;
-          font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-          overflow-x: hidden;
-          line-height: 1.6;
-        }
+        body { margin: 0; background: var(--bg); color: #eee; font-family: sans-serif; overflow-x: hidden; }
         
-        h1, h2, h3, h4 { color: #fff; margin-top: 0; }
-        p { color: #aaa; font-size: 0.95rem; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-
-        /* GLOW ANIMATION */
-        .glow-orb {
-          position: fixed;
-          width: 400px;
-          height: 400px;
-          border-radius: 50%;
-          filter: blur(100px);
-          z-index: -1;
-          opacity: 0.4;
+        /* MODAL STYLES */
+        .modal-overlay {
+          position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+          display: flex; justify-content: center; align-items: center; z-index: 1000;
+          animation: fadeIn 0.3s ease;
         }
-        .purple { top: -100px; left: -100px; background: #7c3aed; animation: pulse 10s infinite alternate; }
-        .blue { bottom: -100px; right: -100px; background: #2563eb; animation: pulse 8s infinite alternate-reverse; }
+        .modal-content {
+          background: #111; border: 1px solid #333; padding: 40px; border-radius: 20px;
+          text-align: center; max-width: 90%; width: 400px;
+          animation: slideUp 0.3s ease;
+        }
+        .modal-btn { display: block; background: #fff; color: #000; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 20px 0; }
+        .close-btn { background: transparent; border: none; color: #888; cursor: pointer; }
         
-        @keyframes pulse {
-            0% { transform: scale(1) translate(0,0); }
-            100% { transform: scale(1.2) translate(50px, 50px); }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* TYPING CURSOR */
+        .cursor { display: inline-block; width: 3px; background: #fff; animation: blink 1s infinite; margin-left: 5px; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* TABS */
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; }
+        .tab {
+          background: transparent; border: 1px solid #333; color: #888; padding: 8px 20px;
+          border-radius: 50px; cursor: pointer; transition: 0.3s; font-size: 0.9rem;
         }
+        .tab.active { background: #fff; color: #000; border-color: #fff; }
 
-        /* LAYOUT & NAV */
-        .container { min-height: 100vh; position: relative; }
-        .content { max-width: 1000px; margin: 0 auto; padding: 20px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .content.visible { opacity: 1; transform: translateY(0); }
-
-        .nav { display: flex; justify-content: space-between; align-items: center; padding: 30px 0; margin-bottom: 60px; }
-        .logo { font-weight: 800; letter-spacing: 1px; font-size: 1.1rem; }
-        .nav-links a { margin-left: 25px; font-size: 0.9rem; color: #aaa; }
-        .nav-links a:hover, .contact-link { color: #fff; }
-        .contact-link { border: 1px solid var(--border); padding: 8px 16px; border-radius: 50px; background: var(--glass); }
-
-        /* HERO SPLIT */
-        .hero-split { display: flex; flex-direction: column-reverse; gap: 40px; align-items: center; margin-bottom: 100px; }
-        @media (min-width: 768px) {
-             .hero-split { flex-direction: row; justify-content: space-between; text-align: left; }
-             .hero-text { max-width: 60%; }
-        }
+        /* CARDS WITH HOVER EFFECT */
+        .project-card { padding: 0 !important; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .project-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.3); }
         
-        h1 { font-size: 3rem; line-height: 1.1; letter-spacing: -1px; margin-bottom: 20px; }
+        .img-wrapper { position: relative; height: 200px; overflow: hidden; }
+        .project-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .project-card:hover .project-img { transform: scale(1.1); }
+        
+        .overlay {
+          position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.6); opacity: 0; transition: 0.3s;
+          display: flex; justify-content: center; align-items: center;
+        }
+        .project-card:hover .overlay { opacity: 1; }
+        .view-btn { padding: 10px 20px; background: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+
+        .card-body { padding: 20px; }
+        .category-tag { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        
+        /* STANDARD STYLES */
+        .glow-orb { position: fixed; width: 300px; height: 300px; border-radius: 50%; filter: blur(90px); z-index: -1; opacity: 0.4; }
+        .purple { top: -50px; left: -50px; background: #7c3aed; }
+        .blue { bottom: -50px; right: -50px; background: #2563eb; }
+        
+        .container { min-height: 100vh; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+        .logo { font-weight: bold; font-size: 1.2rem; }
+        .contact-btn { background: #fff; color: #000; border: none; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        
+        .hero { margin-bottom: 80px; }
+        .badge { border: 1px solid #333; padding: 5px 10px; border-radius: 50px; font-size: 0.8rem; color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+        h1 { font-size: 3rem; margin: 20px 0; line-height: 1.1; }
         .gradient-text { background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { font-size: 1.1rem; max-width: 500px; margin-bottom: 30px; }
+        .subtitle { color: #888; max-width: 500px; line-height: 1.6; }
         
-        .profile-img-container { width: 200px; height: 200px; border-radius: 30px; padding: 10px; transform: rotate(3deg); }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; border-radius: 24px; }
-
-        /* BUTTONS */
-        .hero-btns { display: flex; gap: 15px; }
-        .btn { padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 0.9rem; }
-        .primary { background: #fff; color: #000; }
-        .primary:hover { background: #ddd; }
-        .secondary { border: 1px solid var(--border); background: var(--glass); color: #fff; }
-        .secondary:hover { border-color: #fff; }
-
-        /* BENTO GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .large { grid-column: span 1; }
-        @media (min-width: 768px) { .large { grid-column: span 2; } }
-
-        .card { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: all 0.3s; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
-        
-        /* PROJECT CARDS */
-        .project-card { padding: 0; overflow: hidden; }
-        .project-thumb { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid var(--border); }
-        .project-content { padding: 25px; }
-        .project-header { display: flex; justify-content: space-between; }
-        .arrow { font-size: 1.2rem; }
-
-        /* TAGS */
-        .tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 20px; }
-        .tag { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 50px; border: 1px solid var(--border); color: #ccc; }
-        .highlight { background: #fff; color: #000; border: none; font-weight: 700; }
-
-        /* EXPERIENCE TIMELINE */
-        .timeline { margin-top: 20px; }
-        .timeline-item { border-left: 2px solid var(--border); padding-left: 20px; padding-bottom: 30px; position: relative; }
-        .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: #fff; border-radius: 50%; }
-        .timeline-item:last-child { padding-bottom: 0; }
-        .date { font-size: 0.8rem; color: #888; display: block; margin-bottom: 5px; }
-        .timeline-item h4 { margin-bottom: 5px; }
-
-        /* TESTIMONIAL */
-        .highlight-card { background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(0,0,0,0)); border-color: rgba(255,255,255,0.2); }
-        .quote { font-size: 1.1rem; font-style: italic; color: #fff; }
-        .client-info { margin-top: 20px; font-weight: 600; color: #ccc; }
-
-        /* FOOTER */
-        .footer { margin-top: 120px; text-align: center; padding-bottom: 60px; }
-        .footer h2 { font-size: 2rem; margin-bottom: 30px; }
-        .big { padding: 15px 35px; font-size: 1rem; }
-        .copyright { margin-top: 60px; font-size: 0.8rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; backdrop-filter: blur(10px); }
+        h3 { margin: 10px 0; }
+        p { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; color: #ccc; }
       `}</style>
     </div>
   )
