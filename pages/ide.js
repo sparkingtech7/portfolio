@@ -9,7 +9,7 @@ export default function IDEPortfolio() {
   // Toggle sidebar on mobile
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen)
 
-  // File Content Components
+  // File Content Components - FIXED: Added the function wrapper here
   const renderContent = () => {
     switch(activeFile) {
       case 'home.tsx':
@@ -51,8 +51,8 @@ export default function IDEPortfolio() {
           <div className="file-list">
             <FileItem name="home.tsx" icon="⚛️" active={activeFile} set={setActiveFile} />
             <FileItem name="about.md" icon="📝" active={activeFile} set={setActiveFile} />
-            <FileItem name="projects.json" icon="{}", active={activeFile} set={setActiveFile} />
-            <FileItem name="contact.css" icon="# " active={activeFile} set={setActiveFile} />
+            <FileItem name="projects.json" icon="{}" active={activeFile} set={setActiveFile} />
+            <FileItem name="contact.css" icon="#" active={activeFile} set={setActiveFile} />
           </div>
         </div>
       </div>
