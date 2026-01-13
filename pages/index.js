@@ -1,111 +1,273 @@
 import Head from 'next/head'
+import { useState, useEffect } from 'react'
 
-export default function Portfolio() {
-  const styles = {
-    container: { fontFamily: 'sans-serif', backgroundColor: '#0a0a0a', color: '#ededed', minHeight: '100vh', padding: '24px' },
-    main: { maxWidth: '900px', margin: '0 auto' },
-    nav: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '60px' },
-    logo: { fontSize: '1.2rem', fontWeight: 'bold', letterSpacing: '-0.5px' },
-    hero: { marginBottom: '80px' },
-    h1: { fontSize: '3.5rem', lineHeight: '1.1', margin: '0 0 20px 0', background: 'linear-gradient(to right, #fff, #999)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
-    bio: { fontSize: '1.2rem', color: '#888', maxWidth: '600px', lineHeight: '1.6' },
-    sectionTitle: { fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px', color: '#666', marginBottom: '30px', marginTop: '80px' },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' },
-    card: { backgroundColor: '#111', padding: '30px', borderRadius: '16px', border: '1px solid #222', transition: 'transform 0.2s', textDecoration: 'none', color: 'inherit', display: 'block' },
-    projectTitle: { fontSize: '1.4rem', margin: '0 0 10px 0' },
-    projectDesc: { color: '#888', fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '20px' },
-    tagContainer: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
-    tag: { fontSize: '0.75rem', backgroundColor: '#222', padding: '6px 12px', borderRadius: '100px', color: '#ccc' },
-    contact: { textAlign: 'center', marginTop: '100px', paddingBottom: '40px' },
-    button: { display: 'inline-block', backgroundColor: '#fff', color: '#000', padding: '16px 32px', borderRadius: '100px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.1rem' }
-  }
+export default function AdvancedPortfolio() {
+  const [mounted, setMounted] = useState(false)
+
+  // Trigger animations after load
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
-    <div style={styles.container}>
+    <div className="container">
       <Head>
-        <title>Alex Dev | Full Stack Portfolio</title>
-        <meta name="description" content="Full Stack Developer Portfolio" />
+        <title>Dev Portfolio | Pro</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Injecting CSS directly for advanced effects without external CSS files */}
+        <style>{`
+          :root {
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #3b82f6;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+          }
+          
+          body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+          }
+
+          /* BACKGROUND GLOW EFFECT */
+          .glow-bg {
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 70vw;
+            height: 70vw;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(60px);
+          }
+          
+          .glow-bg-2 {
+            position: fixed;
+            bottom: -20%;
+            right: -20%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(60px);
+          }
+
+          .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+          }
+          
+          .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          /* HERO SECTION */
+          .hero {
+            padding: 100px 0 60px 0;
+          }
+          
+          h1 {
+            font-size: 4rem;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom right, #fff 30%, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          
+          .role-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+          }
+
+          /* BENTO GRID LAYOUT */
+          .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 60px;
+          }
+          
+          .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+          }
+          
+          .card-large {
+            grid-column: span 1;
+          }
+          
+          @media (min-width: 768px) {
+            .card-large {
+              grid-column: span 2;
+            }
+          }
+
+          .card-title {
+            font-size: 1.5rem;
+            margin: 0 0 10px 0;
+            font-weight: 600;
+          }
+          
+          .card-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1rem;
+          }
+
+          /* TECH PILLS */
+          .pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+          }
+          
+          .pill {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: #ccc;
+          }
+
+          /* BUTTONS */
+          .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: #fff;
+            color: #000;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: transform 0.2s;
+          }
+          
+          .btn:hover {
+            transform: scale(1.05);
+          }
+
+        `}</style>
       </Head>
 
-      <main style={styles.main}>
-        {/* NAV */}
-        <nav style={styles.nav}>
-          <div style={styles.logo}>ALEX.DEV</div>
-          <a href="mailto:hello@example.com" style={{color: '#888', textDecoration: 'none'}}>Contact</a>
-        </nav>
+      {/* Background Orbs */}
+      <div className="glow-bg" />
+      <div className="glow-bg-2" />
 
+      <main className={`main-content ${mounted ? 'visible' : ''}`}>
+        
         {/* HERO */}
-        <section style={styles.hero}>
-          <h1 style={styles.h1}>Building digital products with code &amp; passion.</h1>
-          <p style={styles.bio}>
-            I am a Full Stack Developer with 2 years of experience building scalable web applications. 
-            I specialize in the React ecosystem (Next.js) and Node.js backends. 
-            Currently focused on performance optimization and clean UI.
+        <div className="hero">
+          <span className="role-badge">Open for Work</span>
+          <h1>Full Stack<br />Developer.</h1>
+          <p style={{color: '#a1a1aa', fontSize: '1.2rem', maxWidth: '500px'}}>
+            I build accessible, pixel-perfect, performant, and secure web applications.
+            Expertise in the React ecosystem.
           </p>
-        </section>
+          <a href="mailto:email@example.com" className="btn">
+            Download CV →
+          </a>
+        </div>
 
-        {/* TECH STACK */}
-        <section>
-          <h2 style={styles.sectionTitle}>Technical Skills</h2>
-          <div style={styles.tagContainer}>
-            {['Javascript (ES6+)', 'TypeScript', 'React', 'Next.js', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'Git/GitHub', 'Docker'].map(skill => (
-              <span key={skill} style={{...styles.tag, backgroundColor: '#1a1a1a', border: '1px solid #333'}}>{skill}</span>
-            ))}
+        {/* BENTO GRID */}
+        <div className="bento-grid">
+          
+          {/* ABOUT CARD */}
+          <div className="card card-large">
+            <h3 style={{color: '#666', fontSize: '0.9rem', textTransform: 'uppercase', marginBottom: '10px'}}>About</h3>
+            <p className="card-desc">
+              With 2 years of hands-on experience, I bridge the gap between design and engineering. 
+              I have scaled applications from 0 to 10,000+ users and enjoy solving complex database architecture problems.
+            </p>
           </div>
-        </section>
 
-        {/* PROJECTS */}
-        <section>
-          <h2 style={styles.sectionTitle}>Featured Work</h2>
-          <div style={styles.grid}>
-            
-            {/* Project 1 */}
-            <a href="#" style={styles.card}>
-              <h3 style={styles.projectTitle}>Inventory SaaS Dashboard</h3>
-              <p style={styles.projectDesc}>
-                A real-time inventory management system for small businesses. Features include stock tracking, automated alerts, and data visualization.
-              </p>
-              <div style={styles.tagContainer}>
-                <span style={styles.tag}>Next.js</span>
-                <span style={styles.tag}>Supabase</span>
-                <span style={styles.tag}>Recharts</span>
-              </div>
-            </a>
-
-            {/* Project 2 */}
-            <a href="#" style={styles.card}>
-              <h3 style={styles.projectTitle}>E-Commerce API</h3>
-              <p style={styles.projectDesc}>
-                A robust backend API handling 1000+ daily requests. Integrated with Stripe for payments and SendGrid for transactional emails.
-              </p>
-              <div style={styles.tagContainer}>
-                <span style={styles.tag}>Node.js</span>
-                <span style={styles.tag}>Express</span>
-                <span style={styles.tag}>PostgreSQL</span>
-              </div>
-            </a>
-
-            {/* Project 3 */}
-            <a href="#" style={styles.card}>
-              <h3 style={styles.projectTitle}>Crypto Tracker</h3>
-              <p style={styles.projectDesc}>
-                Mobile-first application tracking live crypto prices using public APIs. Optimized for high performance and low latency.
-              </p>
-              <div style={styles.tagContainer}>
-                <span style={styles.tag}>React Native</span>
-                <span style={styles.tag}>Redux</span>
-              </div>
-            </a>
-
+          {/* STACK CARD */}
+          <div className="card">
+            <h3 className="card-title">The Stack</h3>
+            <div className="pill-container">
+              {['Next.js 14', 'TypeScript', 'Tailwind', 'Node.js', 'PostgreSQL', 'Prisma', 'Docker', 'AWS'].map(tech => (
+                <span key={tech} className="pill">{tech}</span>
+              ))}
+            </div>
           </div>
-        </section>
 
-        {/* CONTACT */}
-        <section style={styles.contact}>
-          <h2 style={{fontSize: '2rem', marginBottom: '20px'}}>Ready to work together?</h2>
-          <p style={{color: '#666', marginBottom: '40px'}}>I am currently open to new freelance opportunities.</p>
-          <a href="mailto:email@example.com" style={styles.button}>Get in Touch</a>
-        </section>
+          {/* PROJECT 1 */}
+          <div className="card card-large">
+            <h3 className="card-title">Project: FinTech Dashboard</h3>
+            <p className="card-desc">
+              A high-performance financial dashboard handling real-time socket connections for stock data.
+              Reduced load times by 40% using Next.js Server Components.
+            </p>
+            <div className="pill-container">
+              <span className="pill" style={{background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa'}}>Live Demo ↗</span>
+              <span className="pill">Recharts</span>
+              <span className="pill">WebSockets</span>
+            </div>
+          </div>
+
+          {/* PROJECT 2 */}
+          <div className="card">
+            <h3 className="card-title">E-Commerce Core</h3>
+            <p className="card-desc">
+              Headless Shopify solution with custom checkout flow and automated inventory syncing.
+            </p>
+            <div className="pill-container">
+              <span className="pill">Shopify API</span>
+              <span className="pill">Redis</span>
+            </div>
+          </div>
+
+          {/* SOCIALS */}
+          <div className="card" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}}>
+            <h3 className="card-title">Let's Connect</h3>
+            <div style={{display: 'flex', gap: '15px', marginTop: '10px'}}>
+               <a href="#" style={{color: '#fff'}}>GitHub</a>
+               <a href="#" style={{color: '#fff'}}>LinkedIn</a>
+               <a href="#" style={{color: '#fff'}}>Twitter</a>
+            </div>
+          </div>
+
+        </div>
+
+        <footer style={{marginTop: '100px', borderTop: '1px solid #222', paddingTop: '40px', color: '#444', textAlign: 'center'}}>
+          <p>© 2026 Developer Portfolio. Built with Next.js</p>
+        </footer>
 
       </main>
     </div>
